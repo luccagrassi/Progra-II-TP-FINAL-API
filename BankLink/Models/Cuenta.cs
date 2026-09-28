@@ -18,4 +18,6 @@ public class Cuenta
         ClienteId = clienteId;
         Estado = estado;
     }
+
+    public Cuenta() {}
 }

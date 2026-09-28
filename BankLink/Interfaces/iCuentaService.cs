@@ -3,7 +3,7 @@ using DTOs;
 
 namespace Interfaces;
 
-public interface iCuenta
+public interface iCuentaService
 {
     public Task<List<Cuenta>> GetAll();
     public Task<Cuenta> ObtenerPorId(int id);
