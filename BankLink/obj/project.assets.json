@@ -88,11 +88,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
-      "projectName": "TP Integrador - Mateando",
-      "projectPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\BankLink\\BankLink.csproj",
+      "projectName": "BankLink",
+      "projectPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\BankLink\\BankLink.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\BankLink\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
