@@ -88,11 +88,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
       "projectName": "TP Integrador - Mateando",
-      "projectPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+      "projectPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\Progra-II-TP-FINAL-API\\TP Integrador - Mateando\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -576,7 +576,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "El paquete \"Microsoft.OpenApi\" 2.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"
