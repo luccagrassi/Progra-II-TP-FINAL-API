@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "TtCVVI1z9Qk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.9\\microsoft.aspnetcore.openapi.10.0.9.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "El paquete \"Microsoft.OpenApi\" 2.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Usuario\\Documents\\PROGRAMACIÓN_II\\TP Integrador - Mateando\\TP Integrador - Mateando.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

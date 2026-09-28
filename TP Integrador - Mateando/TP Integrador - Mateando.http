@@ -1,0 +1,6 @@
+@TP_Integrador___Mateando_HostAddress = http://localhost:5131
+
+GET {{TP_Integrador___Mateando_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
