@@ -21,9 +21,10 @@ public class CuentaService(BankLinkContext context) : iCuentaService
         Cuenta cuenta = new Cuenta
         {
             Numero = nuevaCuenta.Numero,
-            Saldo = nuevaCuenta.Saldo,
+            Saldo = 0,
             TipoCuenta = nuevaCuenta.TipoCuenta,
-            ClienteId = nuevaCuenta.ClienteId
+            ClienteId = nuevaCuenta.ClienteId,
+            Estado = true
         };
         context.Cuentas.Add(cuenta);
         await context.SaveChangesAsync();
@@ -33,8 +34,6 @@ public class CuentaService(BankLinkContext context) : iCuentaService
     {
         Cuenta ? cuenta = await ObtenerPorId(id);
         if (cuenta == null) return null;
-        cuenta.Numero = cuentaActualizada.Numero;
-        cuenta.Saldo = cuentaActualizada.Saldo;
         cuenta.TipoCuenta = cuentaActualizada.TipoCuenta;
 
         await context.SaveChangesAsync();

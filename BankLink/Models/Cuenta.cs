@@ -1,15 +1,17 @@
 namespace Models;
 
+using Enums;
+
 public class Cuenta
 {
     public int Id { get; set; }
     public int Numero { get; set; }
-    public Tipo TipoCuenta { get; set; }
-    public int Saldo { get; set; }
+    public TipoCuenta TipoCuenta { get; set; }
+    public decimal Saldo { get; set; }
     public int ClienteId { get; set; }
     public bool Estado { get; set; }
 
-    public Cuenta(int id, int numero, Tipo tipoCuenta, int saldo, int clienteId, bool estado)
+    public Cuenta(int id, int numero, TipoCuenta tipoCuenta, decimal saldo, int clienteId, bool estado)
     {
         Id = id;
         Numero = numero;
