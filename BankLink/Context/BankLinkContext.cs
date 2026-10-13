@@ -10,4 +10,6 @@ public class BankLinkContext : DbContext
 
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Cuenta> Cuentas { get; set; }
+    public DbSet<Movimiento> Movimientos { get; set; }
+    public DbSet<Banco> BancosExternos { get; set; }
 }
