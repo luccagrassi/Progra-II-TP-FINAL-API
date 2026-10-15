@@ -60,7 +60,7 @@ public class CuentasController : ControllerBase
 
 //Depósito
     [HttpPost("{id}/deposito")]
-    public async Task<IActionResult> Deposito(int id, [FromBody] OperacionDTO dto)
+    public async Task<IActionResult> Deposito(int id, [FromBody] MovimientoDTO dto)
     {
         if (dto.Monto <= 0) return BadRequest("El monto debe ser mayor a cero.");
 
@@ -96,7 +96,7 @@ public class CuentasController : ControllerBase
 
 //Retiro
     [HttpPost("{id}/retiro")]
-    public async Task<IActionResult> Retiro(int id, [FromBody] OperacionDTO dto)
+    public async Task<IActionResult> Retiro(int id, [FromBody] MovimientoDTO dto)
     {
         if (dto.Monto <= 0) return BadRequest("El monto debe ser mayor a cero.");
 
