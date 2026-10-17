@@ -24,12 +24,19 @@ builder.Services.AddScoped<iCuentaService, CuentaService>();
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 
+// Registramos los controladores
+builder.Services.AddControllers();
+
+// Genera el documento OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();   // expone el JSON de OpenAPI
+    app.UseSwaggerUI(); // sirve la página web interactiva
 }
 
 app.UseHttpsRedirection();
