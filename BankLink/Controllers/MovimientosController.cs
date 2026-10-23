@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Context;
+using Interfaces;
 using Models;
 
 namespace Controllers;
@@ -9,23 +8,21 @@ namespace Controllers;
 [Route("api/cuentas/{cuentaId}/[controller]")]
 public class MovimientosController : ControllerBase
 {
-    private readonly BankLinkContext _context;
+    private readonly iMovimientoService _movimientoService;
 
-    public MovimientosController(BankLinkContext context)
+    public MovimientosController(iMovimientoService movimientoService)
     {
-        _context = context;
+        _movimientoService = movimientoService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Movimiento>>> GetByCuenta(int cuentaId)
     {
-        var cuentaExiste = await _context.Cuentas.AnyAsync(c => c.Id == cuentaId);
-        if (!cuentaExiste) return NotFound("La cuenta no existe.");
-
-        var movimientos = await _context.Movimientos
-            .Where(m => m.CuentaId == cuentaId)
-            .OrderByDescending(m => m.Fecha)
-            .ToListAsync();
+        var movimientos = await _movimientoService.ObtenerPorCuenta(cuentaId);
+        if (movimientos == null)
+        {
+            return NotFound("La cuenta no existe");
+        }
 
         return Ok(movimientos);
     }

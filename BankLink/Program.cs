@@ -19,13 +19,13 @@ builder.Services.AddDbContext<BankLinkContext>(options =>
 // Inyección de dependencias de servicios
 builder.Services.AddScoped<iClienteService, ClienteService>();
 builder.Services.AddScoped<iCuentaService, CuentaService>();
+builder.Services.AddScoped<iMovimientoService, MovimientoService>();
+
+  
 
 // Add services to the container.
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
-
-// Registramos los controladores
-builder.Services.AddControllers();
 
 // Genera el documento OpenAPI
 builder.Services.AddEndpointsApiExplorer();

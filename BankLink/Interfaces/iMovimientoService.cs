@@ -5,9 +5,7 @@ namespace Interfaces;
 
 public interface iMovimientoService
 {
-    public Task<List<Movimiento>> GetAll();
-    public Task<Movimiento> ObtenerPorId(int id);
-    public Task<Movimiento> Crear(MovimientoDTO nuevoMovimiento);
-    public Task<Movimiento?> Actualizar(int id, MovimientoDTO movimientoActualizado);
-    public Task<bool> Eliminar(int id);
+    public Task<List<Movimiento>?> ObtenerPorCuenta(int cuentaId);
+    public Task<decimal> Depositar(int cuentaId, MovimientoDTO dto);
+    public Task<decimal> Retirar(int cuentaId, MovimientoDTO dto);
 }

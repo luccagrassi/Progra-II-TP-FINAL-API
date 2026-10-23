@@ -18,13 +18,27 @@ public class CuentaService(BankLinkContext context) : iCuentaService
     }
     public async Task<Cuenta> Crear(CuentaCreateDTO nuevaCuenta)
     {
+        //validacion de cliente con su numero de cuenta existente
+        bool clienteExiste = await context.Clientes.AnyAsync(c => c.Id == nuevaCuenta.ClienteId);
+        if (!clienteExiste)
+        {
+            throw new KeyNotFoundException($"No existe un cliente con ID {nuevaCuenta.ClienteId}.");
+        }
+
+        // validacion de numero de cuenta unico
+        bool numeroExiste = await context.Cuentas.AnyAsync(c => c.Numero == nuevaCuenta.Numero);
+        if (numeroExiste)
+        {
+            throw new InvalidOperationException($"El número de cuenta {nuevaCuenta.Numero} ya está registrado.");
+        }
+
         Cuenta cuenta = new Cuenta
         {
             Numero = nuevaCuenta.Numero,
             Saldo = 0,
             TipoCuenta = nuevaCuenta.TipoCuenta,
             ClienteId = nuevaCuenta.ClienteId,
-            Estado = true
+            Estado = nuevaCuenta.Estado
         };
         context.Cuentas.Add(cuenta);
         await context.SaveChangesAsync();
@@ -35,6 +49,7 @@ public class CuentaService(BankLinkContext context) : iCuentaService
         Cuenta ? cuenta = await ObtenerPorId(id);
         if (cuenta == null) return null;
         cuenta.TipoCuenta = cuentaActualizada.TipoCuenta;
+        cuenta.Estado = cuentaActualizada.Estado;
 
         await context.SaveChangesAsync();
         return cuenta;

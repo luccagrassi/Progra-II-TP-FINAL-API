@@ -1,6 +1,7 @@
 namespace Models;
 
 using Enums;
+using System.Text.Json.Serialization;
 
 public class Movimiento
 {

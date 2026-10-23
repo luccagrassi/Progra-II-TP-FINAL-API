@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using DTOs;
 using Models;
-using Enums;
-using Context;
 
 namespace Controllers;
 
@@ -13,12 +10,12 @@ namespace Controllers;
 public class CuentasController : ControllerBase
 {
     private readonly iCuentaService _cuentaService;
-    private readonly BankLinkContext _context;
+    private readonly iMovimientoService _movimientoService;
 
-    public CuentasController(iCuentaService cuentaService, BankLinkContext context)
+    public CuentasController(iCuentaService cuentaService, iMovimientoService movimientoService)
     {
         _cuentaService = cuentaService;
-        _context = context;
+        _movimientoService = movimientoService;
     }
 
     [HttpGet]
@@ -38,8 +35,19 @@ public class CuentasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Cuenta>> Create([FromBody] CuentaCreateDTO dto)
     {
-        var nuevaCuenta = await _cuentaService.Crear(dto);
-        return CreatedAtAction(nameof(GetById), new { id = nuevaCuenta.Id }, nuevaCuenta);
+        try
+        {
+            var nuevaCuenta = await _cuentaService.Crear(dto);
+            return CreatedAtAction(nameof(GetById), new { id = nuevaCuenta.Id }, nuevaCuenta);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
@@ -58,75 +66,40 @@ public class CuentasController : ControllerBase
         return NoContent();
     }
 
-//Depósito
+    //deposito nuevo
     [HttpPost("{id}/deposito")]
     public async Task<IActionResult> Deposito(int id, [FromBody] MovimientoDTO dto)
     {
-        if (dto.Monto <= 0) return BadRequest("El monto debe ser mayor a cero.");
-
-        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var cuenta = await _context.Cuentas.FindAsync(id);
-            if (cuenta == null || !cuenta.Estado) return BadRequest("Cuenta inválida o inactiva.");
-
-            cuenta.Saldo += dto.Monto;
-
-            var movimiento = new Movimiento
-            {
-                CuentaId = id,
-                Tipo = TipoMovimiento.DEPOSITO,
-                Monto = dto.Monto,
-                Fecha = DateTime.UtcNow,
-                Descripcion = dto.Descripcion
-            };
-
-            _context.Movimientos.Add(movimiento);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            return Ok(new { cuenta.Saldo, Mensaje = "Depósito exitoso." });
+            var nuevoSaldo = await _movimientoService.Depositar(id, dto);
+            return Ok(new { Saldo = nuevoSaldo, Mensaje = "Depósito exitoso." });
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+        {
+            return BadRequest(ex.Message);
         }
         catch
         {
-            await transaction.RollbackAsync();
             return StatusCode(500, "Error procesando el depósito.");
         }
     }
 
-//Retiro
+    //retiro nuevo 
     [HttpPost("{id}/retiro")]
     public async Task<IActionResult> Retiro(int id, [FromBody] MovimientoDTO dto)
     {
-        if (dto.Monto <= 0) return BadRequest("El monto debe ser mayor a cero.");
-
-        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var cuenta = await _context.Cuentas.FindAsync(id);
-            if (cuenta == null || !cuenta.Estado) return BadRequest("Cuenta inválida o inactiva.");
-            if (cuenta.Saldo < dto.Monto) return BadRequest("Saldo insuficiente.");
-
-            cuenta.Saldo -= dto.Monto;
-
-            var movimiento = new Movimiento
-            {
-                CuentaId = id,
-                Tipo = TipoMovimiento.RETIRO,
-                Monto = dto.Monto,
-                Fecha = DateTime.UtcNow,
-                Descripcion = dto.Descripcion
-            };
-
-            _context.Movimientos.Add(movimiento);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            return Ok(new { cuenta.Saldo, Mensaje = "Retiro exitoso." });
+            var nuevoSaldo = await _movimientoService.Retirar(id, dto);
+            return Ok(new { Saldo = nuevoSaldo, Mensaje = "Retiro exitoso." });
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+        {
+            return BadRequest(ex.Message);
         }
         catch
         {
-            await transaction.RollbackAsync();
             return StatusCode(500, "Error procesando el retiro.");
         }
     }

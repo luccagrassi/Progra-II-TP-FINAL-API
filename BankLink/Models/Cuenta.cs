@@ -1,6 +1,7 @@
 namespace Models;
 
 using Enums;
+using System.Text.Json.Serialization;
 
 public class Cuenta
 {
@@ -9,6 +10,8 @@ public class Cuenta
     public TipoCuenta TipoCuenta { get; set; }
     public decimal Saldo { get; set; }
     public int ClienteId { get; set; }
+    [JsonIgnore]
+    public Cliente? Cliente { get; set; }
     public bool Estado { get; set; }
 
     public Cuenta(int id, int numero, TipoCuenta tipoCuenta, decimal saldo, int clienteId, bool estado)
