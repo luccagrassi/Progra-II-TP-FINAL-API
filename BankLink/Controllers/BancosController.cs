@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Context;
+using Interfaces;
 using Models;
 using DTOs;
 
@@ -10,25 +9,71 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class BancosController : ControllerBase
 {
-    private readonly BankLinkContext _context;
+    private readonly iBancoService _bancoService;
 
-    public BancosController(BankLinkContext context)
+    public BancosController(iBancoService bancoService)
     {
-        _context = context;
+        _bancoService = bancoService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Banco>>> GetAll()
     {
-        return Ok(await _context.BancosExternos.ToListAsync());
+        var bancos = await _bancoService.GetAll();
+        return Ok(bancos);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Banco>> GetById(int id)
+    {
+        var banco = await _bancoService.ObtenerPorId(id);
+        if (banco == null)
+        {
+            return NotFound($"No se encontró el banco con ID {id}.");
+        }
+        return Ok(banco);
     }
 
     [HttpPost]
     public async Task<ActionResult<Banco>> Create([FromBody] BancoDTO dto)
     {
-        var banco = new Banco { Nombre = dto.Nombre, Codigo = dto.Codigo, UrlApi = dto.UrlApi };
-        _context.BancosExternos.Add(banco);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetAll), new { id = banco.Id }, banco);
+        try
+        {
+            var nuevoBanco = await _bancoService.Crear(dto);
+            return CreatedAtAction(nameof(GetById), new { id = nuevoBanco.Id }, nuevoBanco);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Banco>> Update(int id, [FromBody] BancoDTO dto)
+    {
+        try
+        {
+            var bancoActualizado = await _bancoService.Actualizar(id, dto);
+            if (bancoActualizado == null)
+            {
+                return NotFound($"No se encontró el banco con ID {id} para actualizar.");
+            }
+            return Ok(bancoActualizado);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var eliminado = await _bancoService.Eliminar(id);
+        if (!eliminado)
+        {
+            return NotFound($"No se encontró el banco con ID {id} para eliminar.");
+        }
+        return NoContent();
     }
 }
