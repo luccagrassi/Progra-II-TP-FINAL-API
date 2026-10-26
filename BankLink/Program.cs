@@ -20,9 +20,9 @@ builder.Services.AddDbContext<BankLinkContext>(options =>
 builder.Services.AddScoped<iClienteService, ClienteService>();
 builder.Services.AddScoped<iCuentaService, CuentaService>();
 builder.Services.AddScoped<iMovimientoService, MovimientoService>();
-
+builder.Services.AddScoped<iBancoService, BancoService>();
+builder.Services.AddScoped<iTransferenciaService, TransferenciaService>();
   
-
 // Add services to the container.
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();

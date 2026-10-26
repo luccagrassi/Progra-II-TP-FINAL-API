@@ -7,6 +7,7 @@ public class Movimiento
 {
     public int Id { get; set; }
     public int CuentaId { get; set; }
+    [JsonIgnore]
     public Cuenta? Cuenta { get; set; }
     public TipoMovimiento Tipo { get; set; }
     public decimal Monto { get; set; }

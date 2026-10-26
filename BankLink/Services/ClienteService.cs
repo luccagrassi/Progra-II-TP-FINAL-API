@@ -18,6 +18,12 @@ public class ClienteService(BankLinkContext context) : iClienteService
     }
     public async Task<Cliente> Crear(ClienteDTO nuevoCliente)
     {
+        bool clienteDniDuplicado = await context.Clientes.AnyAsync(c => c.Dni == nuevoCliente.Dni);
+        if (clienteDniDuplicado)
+        {
+            throw new InvalidOperationException($"Ya existe un cliente con DNI {nuevoCliente.Dni}.");
+        }
+
         Cliente cliente = new Cliente
         {
             Nombre = nuevoCliente.Nombre,
@@ -35,6 +41,13 @@ public class ClienteService(BankLinkContext context) : iClienteService
     {
         Cliente ? cliente = await ObtenerPorId(id);
         if (cliente == null) return null;
+
+        bool dniDuplicado = await context.Clientes.AnyAsync(c => c.Dni == clienteActualizado.Dni && c.Id != id);
+        if (dniDuplicado)
+        {
+            throw new InvalidOperationException($"Ya existe un cliente con DNI {clienteActualizado.Dni}.");
+        }
+
         cliente.Nombre = clienteActualizado.Nombre;
         cliente.Apellido = clienteActualizado.Apellido;
         cliente.Dni = clienteActualizado.Dni;

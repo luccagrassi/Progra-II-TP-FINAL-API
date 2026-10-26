@@ -37,8 +37,15 @@ public class ClientesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Cliente>> Create([FromBody] ClienteDTO dto)
     {
-        var nuevoCliente = await _clienteService.Crear(dto);
-        return CreatedAtAction(nameof(GetById), new { id = nuevoCliente.Id }, nuevoCliente);
+        try
+        {
+            var nuevoCliente = await _clienteService.Crear(dto);
+            return CreatedAtAction(nameof(GetById), new { id = nuevoCliente.Id }, nuevoCliente);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]

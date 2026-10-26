@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
-using Context;
-using Models;
-using Enums;
 using DTOs;
+using Interfaces;
 
 namespace Controllers;
 
@@ -12,79 +8,27 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class TransferenciasController : ControllerBase
 {
-    private readonly BankLinkContext _context;
-    private readonly HttpClient _httpClient;
+    private readonly iTransferenciaService _transferenciaService;
 
-    public TransferenciasController(BankLinkContext context, HttpClient httpClient)
+    public TransferenciasController(iTransferenciaService transferenciaService)
     {
-        _context = context;
-        _httpClient = httpClient;
+        _transferenciaService = transferenciaService;
     }
 
     [HttpPost("enviar")]
     public async Task<IActionResult> Enviar([FromBody] TransferenciaPushDTO dto)
     {
-        if (dto.Monto <= 0) return BadRequest("Monto inválido.");
-
-        var bancoDestino = await _context.BancosExternos.FirstOrDefaultAsync(b => b.Codigo == dto.CodigoBancoDestino);
-        if (bancoDestino == null) return NotFound("Banco destino no registrado.");
-
-        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var cuentaOrigen = await _context.Cuentas.FindAsync(dto.CuentaOrigenId);
-            if (cuentaOrigen == null || !cuentaOrigen.Estado) return BadRequest("Cuenta de origen inválida o inactiva.");
-            if (cuentaOrigen.Saldo < dto.Monto) return BadRequest("Saldo insuficiente.");
-
-            // 1. Descontar saldo y registrar movimiento de salida
-            cuentaOrigen.Saldo -= dto.Monto;
-
-            var movimiento = new Movimiento
-            {
-                CuentaId = cuentaOrigen.Id,
-                Tipo = TipoMovimiento.TRANSFERENCIA_ENVIADA,
-                Monto = dto.Monto,
-                Fecha = DateTime.UtcNow,
-                Descripcion = $"A Banco {dto.CodigoBancoDestino} (Cuenta {dto.NumeroCuentaDestino}): {dto.Descripcion}"
-            };
-            _context.Movimientos.Add(movimiento);
-            await _context.SaveChangesAsync();
-
-            // 2. Construir el payload para notificar al banco externo (Inbound del banco destino)
-            var pullDto = new TransferenciaPullDTO
-            {
-                NumeroCuentaDestino = dto.NumeroCuentaDestino,
-                CodigoBancoOrigen = "BANKLINK",
-                Monto = dto.Monto,
-                Descripcion = dto.Descripcion
-            };
-
-            // Si UrlApi ya incluye la ruta de recepción la usamos directo; si es la URL base, agregamos /api/transferencias/recibir
-            var baseUrl = bancoDestino.UrlApi.TrimEnd('/');
-            var endpointDestino = baseUrl.EndsWith("/recibir", StringComparison.OrdinalIgnoreCase)
-                ? baseUrl
-                : $"{baseUrl}/api/transferencias/recibir";
-
-            // 3. Invocar la API del banco externo mediante HTTP POST
-            var response = await _httpClient.PostAsJsonAsync(endpointDestino, pullDto);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var detalleError = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"El banco destino rechazó la transferencia ({(int)response.StatusCode}): {detalleError}");
-            }
-
-            await transaction.CommitAsync();
-            return Ok(new
-            {
-                Mensaje = "Transferencia enviada con éxito.",
-                SaldoRestante = cuentaOrigen.Saldo,
-                MovimientoId = movimiento.Id
-            });
+            await _transferenciaService.Enviar(dto);
+            return Ok(new { Mensaje = "Transferencia enviada con éxito." });
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+        {
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
-            await transaction.RollbackAsync();
             return StatusCode(500, new
             {
                 Error = "Error procesando la transferencia. Transacción revertida.",
@@ -96,41 +40,24 @@ public class TransferenciasController : ControllerBase
     [HttpPost("recibir")]
     public async Task<IActionResult> Recibir([FromBody] TransferenciaPullDTO dto)
     {
-        if (dto.Monto <= 0) return BadRequest("Monto inválido.");
-
-        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var cuentaDestino = await _context.Cuentas.FirstOrDefaultAsync(c => c.Numero == dto.NumeroCuentaDestino);
-            if (cuentaDestino == null || !cuentaDestino.Estado)
-                return NotFound("Cuenta destino no encontrada o inactiva.");
+            var exito = await _transferenciaService.Recibir(dto);
 
-            cuentaDestino.Saldo += dto.Monto;
-
-            var movimiento = new Movimiento
-            {
-                CuentaId = cuentaDestino.Id,
-                Tipo = TipoMovimiento.TRANSFERENCIA_RECIBIDA,
-                Monto = dto.Monto,
-                Fecha = DateTime.UtcNow,
-                Descripcion = $"De Banco {dto.CodigoBancoOrigen}: {dto.Descripcion}"
-            };
-
-            _context.Movimientos.Add(movimiento);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
+            // El controlador arma la respuesta bonita para el cliente web
             return Ok(new
             {
                 Mensaje = "Transferencia recibida e imputada con éxito.",
-                CuentaDestinoNumero = cuentaDestino.Numero,
-                NuevoSaldo = cuentaDestino.Saldo,
-                MovimientoId = movimiento.Id
+                CuentaDestinoNumero = dto.NumeroCuentaDestino,
+                Monto = dto.Monto
             });
         }
-        catch (Exception ex)
+        catch (ArgumentException ex) // Atrapa las validaciones de Monto o Cuenta
         {
-            await transaction.RollbackAsync();
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex) // Atrapa fallos graves (base de datos)
+        {
             return StatusCode(500, new
             {
                 Error = "Error al imputar la transferencia recibida.",
