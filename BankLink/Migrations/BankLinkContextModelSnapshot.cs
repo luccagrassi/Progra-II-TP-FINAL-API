@@ -98,6 +98,11 @@ namespace BankLink.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("Numero")
+                        .IsUnique();
+
                     b.ToTable("Cuentas");
                 });
 
@@ -128,6 +133,17 @@ namespace BankLink.Migrations
                     b.HasIndex("CuentaId");
 
                     b.ToTable("Movimientos");
+                });
+
+            modelBuilder.Entity("Models.Cuenta", b =>
+                {
+                    b.HasOne("Models.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Models.Movimiento", b =>
