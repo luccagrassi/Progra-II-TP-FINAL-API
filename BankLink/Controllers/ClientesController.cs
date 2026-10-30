@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using DTOs;
 using Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ClientesController : ControllerBase
 {
@@ -60,6 +62,7 @@ public class ClientesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
         var eliminado = await _clienteService.Eliminar(id);

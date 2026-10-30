@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/cuentas/{cuentaId}/[controller]")]
 public class MovimientosController : ControllerBase
 {

@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using Models;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers;
 
 [ApiController]
+[Authorize(Roles = "Administrador")]
 [Route("api/[controller]")]
 public class BancosController : ControllerBase
 {

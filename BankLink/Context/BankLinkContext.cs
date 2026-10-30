@@ -12,6 +12,7 @@ public class BankLinkContext : DbContext
     public DbSet<Cuenta> Cuentas { get; set; }
     public DbSet<Movimiento> Movimientos { get; set; }
     public DbSet<Banco> BancosExternos { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; } // Agregado para la autenticación
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

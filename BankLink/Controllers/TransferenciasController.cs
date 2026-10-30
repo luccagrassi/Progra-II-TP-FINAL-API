@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class TransferenciasController : ControllerBase
 {
@@ -38,6 +40,7 @@ public class TransferenciasController : ControllerBase
     }
 
     [HttpPost("recibir")]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Recibir([FromBody] TransferenciaPullDTO dto)
     {
         try
