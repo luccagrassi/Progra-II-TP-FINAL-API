@@ -11,10 +11,10 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class CuentasController : ControllerBase
 {
-    private readonly iCuentaService _cuentaService;
-    private readonly iMovimientoService _movimientoService;
+    private readonly ICuentaService _cuentaService;
+    private readonly IMovimientoService _movimientoService;
 
-    public CuentasController(iCuentaService cuentaService, iMovimientoService movimientoService)
+    public CuentasController(ICuentaService cuentaService, IMovimientoService movimientoService)
     {
         _cuentaService = cuentaService;
         _movimientoService = movimientoService;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
-public class ClienteService(BankLinkContext context) : iClienteService
+public class ClienteService(BankLinkContext context) : IClienteService
 {
     public async Task<IEnumerable<Cliente>> GetAll()
     {

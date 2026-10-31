@@ -3,7 +3,7 @@ using DTOs;
 
 namespace Interfaces;
 
-public interface iBancoService
+public interface IBancoService
 {
     public Task<IEnumerable<Banco>> GetAll();
     public Task<Banco> ObtenerPorId(int id);

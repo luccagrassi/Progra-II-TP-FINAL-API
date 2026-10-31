@@ -10,9 +10,9 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class TransferenciasController : ControllerBase
 {
-    private readonly iTransferenciaService _transferenciaService;
+    private readonly ITransferenciaService _transferenciaService;
 
-    public TransferenciasController(iTransferenciaService transferenciaService)
+    public TransferenciasController(ITransferenciaService transferenciaService)
     {
         _transferenciaService = transferenciaService;
     }

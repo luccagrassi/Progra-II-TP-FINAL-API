@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
-    public class TransferenciaService(BankLinkContext context, HttpClient httpClient) : iTransferenciaService
+    public class TransferenciaService(BankLinkContext context, HttpClient httpClient) : ITransferenciaService
     {
         public async Task<bool> Enviar(TransferenciaPushDTO dto)
         {

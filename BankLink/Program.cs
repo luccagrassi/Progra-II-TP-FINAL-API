@@ -22,10 +22,10 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<BankLinkContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("BankLinkDb")));
 
-// HttpClient TIPADO para consumir otra BibliotecaApi (la de un compañero).
+// HttpClient TIPADO para consumir otr BankLinkApi (la de un compañero).
 // La URL base se lee de appsettings ("ApiExterna:BaseUrl"); por defecto apunta
 // a este mismo proyecto para poder probar el autoconsumo.
-builder.Services.AddHttpClient<iBancoService, BancoService>(client =>
+builder.Services.AddHttpClient<IBancoService, BancoService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiExterna:BaseUrl"]!);
     // API KEY de servicio: viaja en el header X-API-Key en CADA request que haga este cliente.
@@ -34,11 +34,11 @@ builder.Services.AddHttpClient<iBancoService, BancoService>(client =>
 });
 
 // Inyección de dependencias de servicios
-builder.Services.AddScoped<iClienteService, ClienteService>();
-builder.Services.AddScoped<iCuentaService, CuentaService>();
-builder.Services.AddScoped<iMovimientoService, MovimientoService>();
-builder.Services.AddScoped<iBancoService, BancoService>();
-builder.Services.AddScoped<iTransferenciaService, TransferenciaService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<ICuentaService, CuentaService>();
+builder.Services.AddScoped<IMovimientoService, MovimientoService>();
+builder.Services.AddScoped<IBancoService, BancoService>();
+builder.Services.AddScoped<ITransferenciaService, TransferenciaService>();
 
 // Add services to the container.
 builder.Services.AddOpenApi();

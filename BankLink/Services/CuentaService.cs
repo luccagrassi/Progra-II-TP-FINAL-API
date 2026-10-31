@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
-public class CuentaService(BankLinkContext context) : iCuentaService
+public class CuentaService(BankLinkContext context) : ICuentaService
 {
     public async Task<IEnumerable<Cuenta>> GetAll()
     {

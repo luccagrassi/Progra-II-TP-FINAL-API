@@ -11,9 +11,9 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class BancosController : ControllerBase
 {
-    private readonly iBancoService _bancoService;
+    private readonly IBancoService _bancoService;
 
-    public BancosController(iBancoService bancoService)
+    public BancosController(IBancoService bancoService)
     {
         _bancoService = bancoService;
     }

@@ -3,7 +3,7 @@ using DTOs;
 
 namespace Interfaces;
 
-public interface iClienteService
+public interface IClienteService
 {
     public Task<IEnumerable<Cliente>> GetAll();
     public Task<Cliente> ObtenerPorId(int id);

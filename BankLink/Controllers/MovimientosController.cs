@@ -10,9 +10,9 @@ namespace Controllers;
 [Route("api/cuentas/{cuentaId}/[controller]")]
 public class MovimientosController : ControllerBase
 {
-    private readonly iMovimientoService _movimientoService;
+    private readonly IMovimientoService _movimientoService;
 
-    public MovimientosController(iMovimientoService movimientoService)
+    public MovimientosController(IMovimientoService movimientoService)
     {
         _movimientoService = movimientoService;
     }

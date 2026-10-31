@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
-public class MovimientoService(BankLinkContext context) : iMovimientoService
+public class MovimientoService(BankLinkContext context) : IMovimientoService
 {
     // 1. Consultar todos los movimientos de una cuenta
     public async Task<IEnumerable<Movimiento>?> ObtenerPorCuenta(int cuentaId)
