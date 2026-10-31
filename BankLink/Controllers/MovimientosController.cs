@@ -18,7 +18,7 @@ public class MovimientosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Movimiento>>> GetByCuenta(int cuentaId)
+    public async Task<ActionResult<IEnumerable<Movimiento>>> GetByCuenta(int cuentaId)
     {
         var movimientos = await _movimientoService.ObtenerPorCuenta(cuentaId);
         if (movimientos == null)

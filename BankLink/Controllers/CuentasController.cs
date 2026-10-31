@@ -21,7 +21,7 @@ public class CuentasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Cuenta>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Cuenta>>> GetAll()
     {
         return Ok(await _cuentaService.GetAll());
     }

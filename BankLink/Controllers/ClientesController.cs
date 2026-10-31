@@ -19,7 +19,7 @@ public class ClientesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Cliente>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Cliente>>> GetAll()
     {
         var clientes = await _clienteService.GetAll();
         return Ok(clientes);

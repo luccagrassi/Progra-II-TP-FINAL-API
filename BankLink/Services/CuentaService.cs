@@ -8,7 +8,7 @@ namespace Services;
 
 public class CuentaService(BankLinkContext context) : iCuentaService
 {
-    public async Task<List<Cuenta>> GetAll()
+    public async Task<IEnumerable<Cuenta>> GetAll()
     {
         return await context.Cuentas.ToListAsync();
     }

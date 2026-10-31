@@ -19,7 +19,7 @@ public class BancosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Banco>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Banco>>> GetAll()
     {
         var bancos = await _bancoService.GetAll();
         return Ok(bancos);

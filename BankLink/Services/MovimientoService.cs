@@ -10,7 +10,7 @@ namespace Services;
 public class MovimientoService(BankLinkContext context) : iMovimientoService
 {
     // 1. Consultar todos los movimientos de una cuenta
-    public async Task<List<Movimiento>?> ObtenerPorCuenta(int cuentaId)
+    public async Task<IEnumerable<Movimiento>?> ObtenerPorCuenta(int cuentaId)
     {
         bool cuentaExiste = await context.Cuentas.AnyAsync(c => c.Id == cuentaId);
         if (!cuentaExiste) return null;
