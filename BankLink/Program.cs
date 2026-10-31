@@ -86,6 +86,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseAuthentication(); // ¿quién sos? lee y valida el token
 app.UseAuthorization(); // ¿qué podés? aplica [Authorize]
 
@@ -95,8 +96,5 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); // sirve la página web interactiva
 }
 
-app.UseHttpsRedirection();
-
 app.MapControllers();
-
 app.Run();
