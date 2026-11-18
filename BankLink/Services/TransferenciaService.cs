@@ -27,8 +27,8 @@ namespace Services
                 if (cuentaOrigen == null || !cuentaOrigen.Estado)
                     throw new ArgumentException("Cuenta de origen inválida o inactiva.");
 
-                //if (cuentaOrigen.Saldo < dto.Monto)
-                  //  throw new InvalidOperationException("Saldo insuficiente.");
+                if (cuentaOrigen.Saldo < dto.Monto)
+                    throw new InvalidOperationException("Saldo insuficiente.");
 
                 // 1. Descontar saldo y registrar movimiento de salida
                 cuentaOrigen.Saldo -= dto.Monto;

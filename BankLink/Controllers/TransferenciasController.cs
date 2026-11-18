@@ -29,6 +29,10 @@ public class TransferenciasController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (HttpRequestException ex) // Atrapa si el banco de tu compañero rechaza la conexión
+        {
+        return StatusCode(502, new { Error = "Error de comunicación con el banco externo.", Detalle = ex.Message });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new
