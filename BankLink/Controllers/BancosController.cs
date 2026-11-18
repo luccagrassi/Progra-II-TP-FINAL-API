@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Controllers;
 
 [ApiController]
-[Authorize(Roles = "Administrador")]
+[Authorize]
 [Route("api/[controller]")]
 public class BancosController : ControllerBase
 {
