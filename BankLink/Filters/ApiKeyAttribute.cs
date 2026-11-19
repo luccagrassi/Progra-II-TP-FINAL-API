@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BibliotecaApi.Filters;
+namespace Filters;
 
 // Filtro de autorización por API KEY (para comunicación entre servicios / integración).
 // Exige el header "X-API-Key" y lo compara con la clave guardada en configuración
