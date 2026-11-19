@@ -142,7 +142,7 @@ Acceso: **Público** (sin token) · **Token** (usuario autenticado) · **Adminis
 | `GET` | `/api/Bancos/{id}` | Obtener un banco externo | Token |
 | `POST` | `/api/Bancos` | Registrar un banco externo | Token |
 | `PUT` | `/api/Bancos/{id}` | Actualizar un banco externo | Token |
-| `DELETE` | `/api/Bancos/{id}` | Eliminar un banco externo | Token |
+| `DELETE` | `/api/Bancos/{id}` | Eliminar un banco externo | Administrador |
 | `POST` | `/api/Transferencias/enviar` | Enviar una transferencia a otro banco | Token |
 | `POST` | `/api/Transferencias/recibir` | Recibir una transferencia de otro banco | API Key |
 
