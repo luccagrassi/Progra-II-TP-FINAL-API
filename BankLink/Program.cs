@@ -19,12 +19,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-// Configura el cliente HTTP leyendo la URL base desde el appsettings
-builder.Services.AddHttpClient<TransferenciaService>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["ApiExterna:BaseUrl"]!);
-});
-
 builder.Services.AddDbContext<BankLinkContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("BankLinkDb")));
 
