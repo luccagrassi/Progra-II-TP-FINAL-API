@@ -69,6 +69,7 @@ public class BancosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
         var eliminado = await _bancoService.Eliminar(id);
