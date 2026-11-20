@@ -9,7 +9,7 @@ namespace Services;
 
 public class MovimientoService(BankLinkContext context) : IMovimientoService
 {
-    // 1. Consultar todos los movimientos de una cuenta
+    //Consultar todos los movimientos de una cuenta
     public async Task<IEnumerable<Movimiento>?> ObtenerPorCuenta(int cuentaId)
     {
         bool cuentaExiste = await context.Cuentas.AnyAsync(c => c.Id == cuentaId);
@@ -21,7 +21,7 @@ public class MovimientoService(BankLinkContext context) : IMovimientoService
             .ToListAsync();
     }
 
-    // 2. Ingresar dinero (Depósito) de forma atómica
+    //Ingresar dinero (Depósito) de forma atómica
     public async Task<decimal> Depositar(int cuentaId, MovimientoDTO dto)
     {
         if (dto.Monto <= 0)
@@ -61,7 +61,7 @@ public class MovimientoService(BankLinkContext context) : IMovimientoService
         }
     }
 
-    // 3. Retirar dinero (Retiro) verificando saldo suficiente de forma atómica
+    //Retirar dinero (Retiro) verificando saldo suficiente de forma atómica
     public async Task<decimal> Retirar(int cuentaId, MovimientoDTO dto)
     {
         if (dto.Monto <= 0)

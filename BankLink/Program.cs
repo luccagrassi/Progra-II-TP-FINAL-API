@@ -48,7 +48,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // 1) Declara el esquema: un Bearer Token (JWT) que viaja en el header
+    // Declara el esquema: un Bearer Token (JWT) que viaja en el header
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -58,7 +58,7 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Description = "Pegá SOLO el token JWT (sin escribir 'Bearer ' adelante)."
     });
-    // 2) Aplica ese esquema como requisito para los endpoints protegidos
+    // Aplica ese esquema como requisito para los endpoints protegidos
     options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []

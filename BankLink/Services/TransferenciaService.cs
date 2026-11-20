@@ -3,8 +3,6 @@ using DTOs;
 using Enums;
 using Interfaces;
 using Models;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services
@@ -30,13 +28,13 @@ namespace Services
                 if (cuentaOrigen.Saldo < dto.Monto)
                     throw new InvalidOperationException("Saldo insuficiente.");
 
-                // 1. Descontar saldo y registrar movimiento de salida
+                // Descontar saldo y registrar movimiento de salida
                 cuentaOrigen.Saldo -= dto.Monto;
 
                 var movimiento = new Movimiento
                 {
                     CuentaId = cuentaOrigen.Id,
-                    Tipo = TipoMovimiento.TRANSFERENCIA_ENVIADA, // Asegúrate de que este Enum exista
+                    Tipo = TipoMovimiento.TRANSFERENCIA_ENVIADA,
                     Monto = dto.Monto,
                     Fecha = DateTime.UtcNow,
                     Descripcion = $"A Banco {dto.CodigoBancoDestino} (Cuenta {dto.NumeroCuentaDestino}): {dto.Descripcion}"
@@ -45,7 +43,7 @@ namespace Services
                 context.Movimientos.Add(movimiento);
                 await context.SaveChangesAsync();
 
-                // 2. Construir el payload para notificar al banco externo (Inbound del banco destino)
+                // Construir el payload para notificar al banco externo (Inbound del banco destino)
                 var pullDto = new TransferenciaPullDTO
                 {
                     NumeroCuentaDestino = dto.NumeroCuentaDestino,
@@ -54,13 +52,21 @@ namespace Services
                     Descripcion = dto.Descripcion
                 };
 
-                // Si UrlApi ya incluye la ruta de recepción la usamos directo; si es la URL base, agregamos /api/transferencias/recibir
+                // Si UrlApi ya incluye la ruta de recepción la usamos directo; 
+                // si es la URL base, agregamos /api/transferencias/recibir
                 var baseUrl = bancoDestino.UrlApi.TrimEnd('/');
-                var endpointDestino = baseUrl.EndsWith("/recibir", StringComparison.OrdinalIgnoreCase)
-                    ? baseUrl
-                    : $"{baseUrl}/api/transferencias/recibir";
+                string endpointDestino;
 
-                // 3. Invocar la API del banco externo mediante HTTP POST
+                if (baseUrl.EndsWith("/recibir", StringComparison.OrdinalIgnoreCase))
+                {
+                    endpointDestino = baseUrl;
+                }
+                else
+                {
+                    endpointDestino = $"{baseUrl}/api/transferencias/recibir";
+                }
+
+                // Invocar la API del banco externo mediante HTTP POST
                 var response = await httpClient.PostAsJsonAsync(endpointDestino, pullDto);
 
                 if (!response.IsSuccessStatusCode)

@@ -22,6 +22,7 @@ public class BankLinkContext : DbContext
         modelBuilder.Entity<Cuenta>().HasIndex(c => c.Numero).IsUnique();
 
         //coneccion clave cliente
+        //esto hace que cuando se elimine un cliente, se eliminen sus cuentas asociadas
         modelBuilder.Entity<Cuenta>().HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.ClienteId).OnDelete(DeleteBehavior.Cascade);
     }
 }
